@@ -1,9 +1,9 @@
-package com.radialo.topredditapp.model
+package com.radialo.topreddit.model
 
 import java.util.Date
 
 data class Post(
-    val id: String,
+    val name: String,
     val author: String,
     val title: String,
     val data: Date,
