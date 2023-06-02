@@ -16,7 +16,7 @@ class RedditPostService : PostService, Callable<List<Post>> {
     private var client = OkHttpClient();
     private var url: String = "http://www.reddit.com/top.json"
 
-    private var limit: Int = 5
+    private var limit: Int = 10
     private var after: String? = null
 
     override fun getByPage(): List<Post> {
