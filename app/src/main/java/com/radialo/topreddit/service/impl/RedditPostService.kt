@@ -9,7 +9,7 @@ import org.json.JSONObject
 import java.net.URL
 import java.util.concurrent.Callable
 
-class RedditPostService : PostService, Callable<List<Post>> {
+class RedditPostService : PostService {
     private var postMapper: PostMapper = PostMapper()
     private var client = OkHttpClient()
     private var url: String = "http://www.reddit.com/top.json"
@@ -19,34 +19,27 @@ class RedditPostService : PostService, Callable<List<Post>> {
     private var after: String? = null
     private var posts: List<Post> = emptyList()
 
-    override fun loadFirstPage(): List<Post> {
+    override suspend fun loadFirstPage(): List<Post> {
         after = null
         before = null
         return getPage()
     }
 
-    override fun loadNextPage(): List<Post> {
+    override suspend fun loadNextPage(): List<Post> {
         after = posts[posts.size - 1].name
         return getPage()
     }
 
-    override fun loadPrevPage(): List<Post> {
+    override suspend fun loadPrevPage(): List<Post> {
         before = posts[0].name
         return getPage()
     }
 
-    override fun reloadPage(): List<Post> {
+    override suspend fun reloadPage(): List<Post> {
         return getPage()
     }
 
-    override fun setPerPage(limit: Int): List<Post> {
-        after = null
-        before = null
-        this.limit = limit
-        return getPage()
-    }
-
-    private fun getPage(): List<Post> {
+    private suspend fun getPage(): List<Post> {
         val url = URL(url
                 + "?limit=" + limit.toString()
                 + if (after != null) "&after=" + after else ""
@@ -64,9 +57,5 @@ class RedditPostService : PostService, Callable<List<Post>> {
         } catch (e: Exception) {
             throw java.lang.RuntimeException("Can't get top posts from Reddit", e)
         }
-    }
-
-    override fun call(): List<Post> {
-        return getPage()
     }
 }
