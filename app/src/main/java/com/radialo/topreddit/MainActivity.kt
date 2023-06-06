@@ -1,49 +1,52 @@
 package com.radialo.topreddit
 
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.radialo.topreddit.adapter.PostAdapter
 import com.radialo.topreddit.model.Post
 import com.radialo.topreddit.service.impl.RedditPostService
 import kotlinx.coroutines.*
-import java.util.concurrent.Executors
 
 
 class MainActivity : AppCompatActivity() {
     private val scope = CoroutineScope(Dispatchers.Main)
     private val postService = RedditPostService()
-    private lateinit var postsList : ListView
+    private lateinit var postsList : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         postsList = findViewById(R.id.posts_list)
-        val prevButton = findViewById<Button>(R.id.prev_button)
-        val nextButton = findViewById<Button>(R.id.next_button)
-        scope.launch {
-            setPosts(withContext(Dispatchers.IO) {
-                postService.loadFirstPage()
-            })
-        }
-        prevButton.setOnClickListener {
-            scope.launch {
-                setPosts(withContext(Dispatchers.IO) {
-                    postService.loadPrevPage()
-                })
-            }
-        }
-        nextButton.setOnClickListener {
-            scope.launch {
-                setPosts(withContext(Dispatchers.IO) {
-                    postService.loadNextPage()
-                })
-            }
-        }
-    }
+        postsList.layoutManager = LinearLayoutManager(this)
 
-    private fun setPosts(posts : List<Post>) {
-        postsList.adapter = PostAdapter(this, R.layout.item_post, posts)
+        scope.launch {
+            postsList.adapter = PostAdapter(ArrayList(withContext(Dispatchers.IO) {
+                postService.loadFirstPage()
+            }))
+        }
+
+
+        postsList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val adapter = recyclerView.adapter as PostAdapter
+                val manager = recyclerView.layoutManager as LinearLayoutManager
+                if (!adapter.isLoading) {
+                    if (manager.itemCount - manager.childCount <=
+                        manager.findFirstVisibleItemPosition()
+                    ) {
+                        adapter.isLoading = true
+                        scope.launch {
+                            adapter.insertAll(withContext(Dispatchers.IO) {
+                                postService.loadNextPage()
+                            })
+                            adapter.isLoading = false
+                        }
+                    }
+                }
+            }
+        })
     }
 }
