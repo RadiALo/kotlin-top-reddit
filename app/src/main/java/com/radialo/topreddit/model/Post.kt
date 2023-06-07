@@ -8,6 +8,7 @@ data class Post(
     val title: String,
     val date: Date,
     val thumbnail: String,
+    val upscale: String,
     val commentsCount: Int
 ) {
     fun getHoursAgo() : Int {

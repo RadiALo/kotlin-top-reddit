@@ -1,15 +1,21 @@
 package com.radialo.topreddit.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.provider.Settings.Global.getString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.radialo.topreddit.R
+import com.radialo.topreddit.UpscaleActivity
 import com.radialo.topreddit.model.Post
 import com.squareup.picasso.Picasso
+
 
 class PostAdapter(private val dataSet: ArrayList<Post>, private val context : Context)
     : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
@@ -37,14 +43,23 @@ class PostAdapter(private val dataSet: ArrayList<Post>, private val context : Co
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
+        // Set actions on thumbnail click
+        holder.thumbnail.setOnClickListener {
+            val upscaleIntent = Intent(context, UpscaleActivity::class.java)
+            upscaleIntent.putExtra("upscale", dataSet[position].upscale)
+            startActivity(context, upscaleIntent, null)
+        }
         // Set post values
         holder.authorView.text = dataSet[position].author
         holder.titleView.text = dataSet[position].title
         // Set formatted date and comments count
+        val hours = dataSet[position].getHoursAgo()
         holder.dateView.text = context.resources
-            .getQuantityText(R.plurals.hours_ago, dataSet[position].getHoursAgo())
+            .getQuantityString(R.plurals.hours_ago, hours)
+            .format(hours)
         holder.commentsCount.text = context.resources
-            .getQuantityText(R.plurals.comments_count, dataSet[position].commentsCount)
+            .getQuantityString(R.plurals.comments_count, dataSet[position].commentsCount)
+            .format(dataSet[position].commentsCount)
         // Load and set image or hide it
         if (dataSet[position].thumbnail != "") {
             holder.thumbnail.visibility = View.VISIBLE

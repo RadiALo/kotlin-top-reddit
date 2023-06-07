@@ -12,6 +12,7 @@ class PostMapper : GenericMapper<Post> {
             json.getString("title"),
             Date(json.getLong("created") * 1000L),
             if (json.getBoolean("is_video")) "" else json.getString("thumbnail"),
+            json.getString("url"),
             json.getInt("num_comments")
         )
     }
