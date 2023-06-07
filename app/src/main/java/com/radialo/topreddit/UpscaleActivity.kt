@@ -7,7 +7,6 @@ import android.os.Environment
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import java.io.File
@@ -33,14 +32,17 @@ class UpscaleActivity : AppCompatActivity() {
             val seconds = System.currentTimeMillis()
             val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
                 "post_$seconds.jpg")
+            // Creating bitmap
             val bitmap = Bitmap.createBitmap(
                 upscaleImage.width,
                 upscaleImage.height,
                 Bitmap.Config.ARGB_8888
             )
             upscaleImage.draw(Canvas(bitmap))
+            // Saving file
             val stream = FileOutputStream(file)
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            // Sending message
             Snackbar.make(
                 findViewById(R.id.upscale_layout),
                 R.string.download_message,
