@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Top Reddit</string>
+    <string name="download_text">Download</string>
+    <string name="close_text">Close</string>
+    <string name="comments_text">%d comments</string>
+    <string name="download_message">Image downloaded to the gallery!</string>
 </resources>
