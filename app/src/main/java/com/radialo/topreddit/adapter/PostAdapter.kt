@@ -2,8 +2,6 @@ package com.radialo.topreddit.adapter
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
-import android.provider.Settings.Global.getString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
