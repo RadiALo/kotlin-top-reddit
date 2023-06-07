@@ -14,6 +14,7 @@ The default pagination is 25 elements. The service has the following methods:
   - loadNextPage() - returns next page as a list of posts
   - loadPrevPage() - returns previous page as a list of posts
   - reloadPage() - returns current page as a list of posts
+- PostMapper is a class that converts JSONObject and JSONArray objects to Post model objects.
 - Also, a PostAdapter class was created to display the list of posts on the RecyclerView.
   - The PostScrollListener class works together with the adapter, uploading new posts as needed.
 ## Activity
