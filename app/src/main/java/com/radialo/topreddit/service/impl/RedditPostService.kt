@@ -40,9 +40,11 @@ class RedditPostService : PostService {
     }
 
     private fun getPage(): List<Post> {
+        // Setup url with required params
         val url = URL("$url?limit= $limit"
                 + if (after != null) "&after=$after" else ""
                 + if (before != null) "&before=$before" else "")
+        // Request, map and return posts
         val request = Request.Builder().url(url).build()
         try {
             val response = client.newCall(request).execute()

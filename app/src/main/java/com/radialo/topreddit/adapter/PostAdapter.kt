@@ -37,12 +37,15 @@ class PostAdapter(private val dataSet: ArrayList<Post>, private val context : Co
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
+        // Set post values
         holder.authorView.text = dataSet[position].author
         holder.titleView.text = dataSet[position].title
+        // Set formatted date and comments count
         holder.dateView.text = context.resources
             .getQuantityText(R.plurals.hours_ago, dataSet[position].getHoursAgo())
         holder.commentsCount.text = context.resources
             .getQuantityText(R.plurals.comments_count, dataSet[position].commentsCount)
+        // Load and set image or hide it
         if (dataSet[position].thumbnail != "") {
             holder.thumbnail.visibility = View.VISIBLE
             Picasso.with(holder.thumbnail.context)
