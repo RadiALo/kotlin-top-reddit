@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.radialo.topreddit.adapter.PostAdapter
+import com.radialo.topreddit.adapter.listener.PostScrollListener
 import com.radialo.topreddit.service.impl.RedditPostService
 import kotlinx.coroutines.*
 
@@ -29,25 +30,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Set loading new posts on scroll
-        postsList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val adapter = recyclerView.adapter as PostAdapter
-                val manager = recyclerView.layoutManager as LinearLayoutManager
-                if (!adapter.isLoading) {
-                    if (manager.itemCount - manager.childCount <=
-                        manager.findFirstVisibleItemPosition()
-                    ) {
-                        adapter.isLoading = true
-                        scope.launch {
-                            adapter.insertAll(withContext(Dispatchers.IO) {
-                                postService.loadNextPage()
-                            })
-                            adapter.isLoading = false
-                        }
-                    }
-                }
-            }
-        })
+        postsList.addOnScrollListener(PostScrollListener(postService))
     }
 }
