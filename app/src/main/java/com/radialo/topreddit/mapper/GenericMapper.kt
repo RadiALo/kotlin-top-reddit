@@ -5,7 +5,7 @@ import org.json.JSONObject
 
 interface GenericMapper<M> {
     fun toModel(json : JSONArray): List<M> {
-        var models: ArrayList<M> = ArrayList()
+        val models: ArrayList<M> = ArrayList()
         for (i in 0 until json.length()) {
             models.add(toModel(json.getJSONObject(i).getJSONObject("data")))
         }

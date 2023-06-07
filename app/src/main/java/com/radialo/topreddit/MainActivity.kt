@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.radialo.topreddit.adapter.PostAdapter
-import com.radialo.topreddit.model.Post
 import com.radialo.topreddit.service.impl.RedditPostService
 import kotlinx.coroutines.*
 

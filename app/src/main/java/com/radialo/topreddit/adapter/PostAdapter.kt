@@ -1,6 +1,5 @@
 package com.radialo.topreddit.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +15,9 @@ class PostAdapter(private val dataSet: ArrayList<Post>)
 
     var isLoading = false
 
-    fun  insert(post : Post) {
+    private fun insert(post : Post) {
         dataSet.add(post)
-        notifyDataSetChanged()
+        notifyItemInserted(dataSet.size - 1)
     }
 
     fun insertAll(posts : List<Post>) {
@@ -39,8 +38,8 @@ class PostAdapter(private val dataSet: ArrayList<Post>)
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         holder.authorView.text = dataSet[position].author
         holder.titleView.text = dataSet[position].title
-        holder.dateView.text = dataSet[position].getHoursAgo().toString()
-        holder.commentsCount.text = dataSet[position].commentsCount.toString()
+        holder.dateView.text = dataSet[position].getHoursAgoFormatted()
+        holder.commentsCount.text = dataSet[position].commentsCount.toString() + " comments"
         if (dataSet[position].thumbnail != "") {
             holder.thumbnail.visibility = View.VISIBLE
             Picasso.with(holder.thumbnail.context)
