@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var postsList : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        resources
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         postsList = findViewById(R.id.posts_list)
@@ -23,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         scope.launch {
             postsList.adapter = PostAdapter(ArrayList(withContext(Dispatchers.IO) {
                 postService.loadFirstPage()
-            }))
+            }), this@MainActivity)
         }
 
 
