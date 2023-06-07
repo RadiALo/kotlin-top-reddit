@@ -21,14 +21,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         postsList = findViewById(R.id.posts_list)
         postsList.layoutManager = LinearLayoutManager(this)
-
         // Get first page
         scope.launch {
             postsList.adapter = PostAdapter(ArrayList(withContext(Dispatchers.IO) {
                 postService.loadFirstPage()
             }), this@MainActivity)
         }
-
         // Set loading new posts on scroll
         postsList.addOnScrollListener(PostScrollListener(postService))
     }

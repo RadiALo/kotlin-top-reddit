@@ -63,6 +63,8 @@ class PostAdapter(private val dataSet: ArrayList<Post>, private val context : Co
             holder.thumbnail.visibility = View.VISIBLE
             Picasso.with(holder.thumbnail.context)
                 .load(dataSet[position].thumbnail)
+                .error(R.drawable.ic_image_load_fail)
+                .placeholder(R.drawable.ic_image_loading)
                 .into(holder.thumbnail)
         } else {
             holder.thumbnail.visibility = View.GONE

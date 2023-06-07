@@ -26,31 +26,37 @@ class UpscaleActivity : AppCompatActivity() {
         // Set image
         Picasso.with(this)
             .load(intent.getStringExtra("upscale"))
+            .error(R.drawable.ic_image_load_fail)
+            .placeholder(R.drawable.ic_image_loading)
             .into(upscaleImage)
         // Set actions on Buttons click
         downloadButton.setOnClickListener {
-            val seconds = System.currentTimeMillis()
-            val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                "post_$seconds.jpg")
-            // Creating bitmap
-            val bitmap = Bitmap.createBitmap(
-                upscaleImage.width,
-                upscaleImage.height,
-                Bitmap.Config.ARGB_8888
-            )
-            upscaleImage.draw(Canvas(bitmap))
-            // Saving file
-            val stream = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-            // Sending message
-            Snackbar.make(
-                findViewById(R.id.upscale_layout),
-                R.string.download_message,
-                Snackbar.LENGTH_SHORT
-            ).show()
+            saveImage()
         }
         closeButton.setOnClickListener {
             finish()
         }
+    }
+
+    fun saveImage() {
+        val seconds = System.currentTimeMillis()
+        val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            "post_$seconds.jpg")
+        // Creating bitmap
+        val bitmap = Bitmap.createBitmap(
+            upscaleImage.width,
+            upscaleImage.height,
+            Bitmap.Config.ARGB_8888
+        )
+        upscaleImage.draw(Canvas(bitmap))
+        // Saving file
+        val stream = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        // Sending message
+        Snackbar.make(
+            findViewById(R.id.upscale_layout),
+            R.string.download_message,
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
 }
